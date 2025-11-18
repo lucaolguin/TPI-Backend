@@ -41,4 +41,9 @@ public class TramoController {
     public void delete(@PathVariable Long id) {
         tramoService.delete(id);
     }
+
+    @PostMapping("/{id}/asignar-camion")
+    public TramoDto asignarCamion(@PathVariable Long id, @RequestBody com.tpi.logistica.dto.TramoAssignDto dto) {
+        return TramoMapper.toDto(tramoService.asignarCamion(id, dto.getCamionId()));
+    }
 }

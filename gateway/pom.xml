@@ -35,14 +35,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-gateway-mvc</artifactId>
-		</dependency>
+		<!-- Use reactive Spring Cloud Gateway; remove servlet/webmvc starters to avoid classpath conflicts -->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
