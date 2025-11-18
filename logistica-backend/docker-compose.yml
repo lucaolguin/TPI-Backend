@@ -22,7 +22,7 @@ services:
       PMA_HOST: mysql
       PMA_PORT: 3306
     ports:
-      - "8081:80"
+      - "8082:80"
     networks:
       - logistica-net
 
@@ -34,12 +34,17 @@ services:
     restart: always
     depends_on:
       - mysql
+      - keycloak
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/logistica_db
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/tpi-backend
       KEYCLOAK_URL: http://keycloak:8080
+      KEYCLOAK_REALM: tpi-backend
+      KEYCLOAK_ADMIN_USER: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin123
     ports:
       - "8080:8080"
     networks:
@@ -53,20 +58,25 @@ services:
     restart: always
     depends_on:
       - backend
+      - keycloak
+    environment:
+      KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/tpi-backend
     ports:
       - "9000:9000"
     networks:
       - logistica-net
 
   keycloak:
-    image: quay.io/keycloak/keycloak:24.0
+    image: quay.io/keycloak/keycloak:24.0.3
     container_name: keycloak
     command: start-dev
-    environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
     ports:
-      - "8181:8080"
+      - "8081:8080"
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin123
+    volumes:
+      - keycloak_data:/opt/keycloak/data
     networks:
       - logistica-net
 
@@ -75,3 +85,4 @@ networks:
 
 volumes:
   mysql_data:
+  keycloak_data:

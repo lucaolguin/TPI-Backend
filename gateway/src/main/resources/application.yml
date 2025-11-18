@@ -2,6 +2,14 @@ server:
   port: 9000
 
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # Para Docker (default): http://keycloak:8080/realms/tpi-backend
+          # Para desarrollo local: http://localhost:8081/realms/tpi-backend
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://keycloak:8080/realms/tpi-backend}
+
   cloud:
     gateway:
       routes:

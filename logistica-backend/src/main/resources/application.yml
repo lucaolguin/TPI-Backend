@@ -1,13 +1,13 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/logistica_db?createDatabaseIfNotExist=true&serverTimezone=UTC
+    url: jdbc:mysql://mysql:3306/logistica_db?createDatabaseIfNotExist=true&serverTimezone=UTC
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: update   # durante desarrollo
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -17,10 +17,21 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://keycloak:8080/realms/logistica
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://keycloak:8080/realms/tpi-backend}
 
 server:
   port: 8080
 
 keycloak:
-  url: ${KEYCLOAK_URL:http://localhost:8181}
+  url: ${KEYCLOAK_URL:http://keycloak:8080}
+  realm: ${KEYCLOAK_REALM:tpi-backend}
+  admin:
+    username: ${KEYCLOAK_ADMIN_USER:admin}
+    password: ${KEYCLOAK_ADMIN_PASSWORD:admin123}
+    client-id: ${KEYCLOAK_ADMIN_CLIENT:admin-cli}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev-no-security

@@ -15,6 +15,18 @@ public class ClienteAuthController {
 
     @Value("${keycloak.url}")
     private String keycloakUrl;
+    
+    @Value("${keycloak.realm:logistica}")
+    private String realm;
+    
+    @Value("${keycloak.admin.username:admin}")
+    private String adminUsername;
+    
+    @Value("${keycloak.admin.password:admin}")
+    private String adminPassword;
+    
+    @Value("${keycloak.admin.client-id:admin-cli}")
+    private String adminClientId;
 
     private final ClienteService clienteService;
 
@@ -24,10 +36,10 @@ public class ClienteAuthController {
         // 1) Crear usuario en Keycloak
         Keycloak keycloak = KeycloakBuilder.builder()
                 .serverUrl(keycloakUrl)
-                .realm("logistica")
-                .clientId("admin-cli")
-                .username("admin")
-                .password("admin")
+                .realm(realm)
+                .clientId(adminClientId)
+                .username(adminUsername)
+                .password(adminPassword)
                 .build();
 
         UserRepresentation user = new UserRepresentation();
@@ -42,7 +54,7 @@ public class ClienteAuthController {
 
         user.setCredentials(java.util.List.of(password));
 
-        keycloak.realm("logistica").users().create(user);
+        keycloak.realm(realm).users().create(user);
 
         // 2) Guardar cliente en BD
         clienteService.create(cliente);
