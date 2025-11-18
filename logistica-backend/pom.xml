@@ -90,6 +90,14 @@
 			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
 		</dependency>
 
+		<!-- MockWebServer for testing HTTP clients -->
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>mockwebserver</artifactId>
+			<version>4.11.0</version>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- Keycloak Admin Client -->
 		<dependency>
 			<groupId>org.keycloak</groupId>

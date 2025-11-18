@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      run_integration:
+        description: 'Run integration job (requires MAPS_GOOGLE_API_KEY secret)'
+        required: false
+        default: 'false'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build and run tests
+        run: |
+          cd logistica-backend
+          mvn -B -DskipTests=false test
+
+  integration:
+    if: ${{ secrets.MAPS_GOOGLE_API_KEY != '' && (github.event.inputs.run_integration == 'true' || github.event_name == 'workflow_dispatch') }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Run integration tests (uses real Google Maps key)
+        env:
+          MAPS_GOOGLE_API_KEY: ${{ secrets.MAPS_GOOGLE_API_KEY }}
+        run: |
+          cd logistica-backend
+          mvn -B -DskipTests=false test -Pintegration

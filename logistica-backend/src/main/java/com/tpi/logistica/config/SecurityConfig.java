@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
@@ -59,19 +60,18 @@ public class SecurityConfig {
         converter.setJwtGrantedAuthoritiesConverter(jwt -> {
 
             // Convertidor por defecto (si tuviera authorities extras)
-            Collection<SimpleGrantedAuthority> defaultAuthorities =
-                    (Collection<SimpleGrantedAuthority>) defaultConverter.convert(jwt);
+            Collection<GrantedAuthority> defaultAuthorities = defaultConverter.convert(jwt);
 
             // Obtener roles desde "realm_access.roles"
             List<String> realmRoles = jwt.getClaimAsStringList("realm_access.roles");
             if (realmRoles == null) realmRoles = List.of();
 
             // Convertir "admin" → ROLE_admin
-            List<SimpleGrantedAuthority> kcAuthorities = realmRoles.stream()
+            List<GrantedAuthority> kcAuthorities = realmRoles.stream()
                     .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                     .collect(Collectors.toList());
 
-            // Unimos ambas listas
+            // Unimos ambas colecciones
             kcAuthorities.addAll(defaultAuthorities);
 
             return kcAuthorities;
