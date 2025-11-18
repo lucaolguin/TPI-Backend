@@ -20,7 +20,7 @@ public class CostoService {
         if (tramo == null) return null;
 
         Double distanceKm = null;
-        if (tramo.getDepositoOrigen() != null && tramo.getDepositoDestino() != null) {
+        if (tramo.getDepositoOrigen() != null && tramo.getDepositoDestino() != null && mapsClient != null) {
             var o = tramo.getDepositoOrigen();
             var d = tramo.getDepositoDestino();
             DistanceResult res = mapsClient.getDistanceKmAndDurationMin(o.getLat(), o.getLon(), d.getLat(), d.getLon());

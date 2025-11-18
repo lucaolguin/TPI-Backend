@@ -112,6 +112,9 @@ public class TramoService {
 
         // Calcular costo real usando CostoService (que usa MapsClient internamente)
         Double costoReal = costoService.calcularCostoReal(tramo);
+        if (costoReal != null) {
+            tramo.setCostoReal(costoReal);
+        }
 
         // Liberar camión si existe
         if (tramo.getCamion() != null) {
