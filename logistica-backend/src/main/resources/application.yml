@@ -30,8 +30,8 @@ keycloak:
     password: ${KEYCLOAK_ADMIN_PASSWORD:admin123}
     client-id: ${KEYCLOAK_ADMIN_CLIENT:admin-cli}
 
----
-spring:
-  config:
-    activate:
-      on-profile: dev-no-security
+# Google Maps configuration: the API key is read from the environment variable
+# `MAPS_GOOGLE_API_KEY`. Leave empty for local fallback (Haversine) in tests.
+maps:
+  google:
+    api-key: ${MAPS_GOOGLE_API_KEY:}

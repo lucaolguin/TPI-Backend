@@ -18,10 +18,10 @@ import java.nio.charset.StandardCharsets;
 @RequestMapping("/api/login/oauth2/code")
 public class KeycloakCallbackController {
 
-    @Value("${keycloak.url}")
+    @Value("${keycloak.url:http://localhost:8080/auth}")
     private String keycloakUrl;
 
-    @Value("${keycloak.realm}")
+    @Value("${keycloak.realm:logistica}")
     private String realm;
 
     @GetMapping("/keycloak")

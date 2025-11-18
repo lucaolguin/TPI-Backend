@@ -3,6 +3,7 @@ package com.tpi.logistica.tramo;
 import com.tpi.logistica.camion.Camion;
 import com.tpi.logistica.camion.CamionRepository;
 import com.tpi.logistica.contenedor.Contenedor;
+import com.tpi.logistica.costo.CostoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ public class TramoService {
     private final TramoRepository tramoRepository;
     private final CamionRepository camionRepository;
     private final com.tpi.logistica.solicitud.SolicitudRepository solicitudRepository;
+    private final CostoService costoService;
 
     public List<Tramo> findAll() {
         return tramoRepository.findAll();
@@ -108,27 +110,8 @@ public class TramoService {
         tramo.setFechaHoraFin(java.time.LocalDateTime.now());
         tramo.setEstado("finalizado");
 
-        // Calcular costo real de forma estimada si contamos con tarifa y camión
-        Double costoReal = null;
-        if (tramo.getTarifa() != null && tramo.getCamion() != null) {
-            double estimatedKm = 50.0; // valor temporal hasta integrar MapsClient
-            double costoKm = tramo.getTarifa().getCostoKmBase() == null ? 0.0 : tramo.getTarifa().getCostoKmBase() * estimatedKm;
-            double consumoLtKm = tramo.getCamion().getConsumoLtKm() == null ? 0.0 : tramo.getCamion().getConsumoLtKm();
-            double valorLitro = tramo.getTarifa().getValorLitroCombustible() == null ? 0.0 : tramo.getTarifa().getValorLitroCombustible();
-            double costoCombustible = consumoLtKm * estimatedKm * valorLitro;
-            double costoGestion = tramo.getTarifa().getCostoGestionTramo() == null ? 0.0 : tramo.getTarifa().getCostoGestionTramo();
-
-            double recargoVol = 0.0;
-            double recargoPeso = 0.0;
-            if (tramo.getRuta() != null && tramo.getRuta().getSolicitud() != null && tramo.getRuta().getSolicitud().getContenedor() != null) {
-                var cont = tramo.getRuta().getSolicitud().getContenedor();
-                recargoVol = (tramo.getTarifa().getRecargoVolumenPorM3() == null ? 0.0 : tramo.getTarifa().getRecargoVolumenPorM3()) * (cont.getVolumenM3() == null ? 0.0 : cont.getVolumenM3());
-                recargoPeso = (tramo.getTarifa().getRecargoPesoPorKg() == null ? 0.0 : tramo.getTarifa().getRecargoPesoPorKg()) * (cont.getPesoKg() == null ? 0.0 : cont.getPesoKg());
-            }
-
-            costoReal = costoKm + costoCombustible + costoGestion + recargoVol + recargoPeso;
-            tramo.setCostoReal(costoReal);
-        }
+        // Calcular costo real usando CostoService (que usa MapsClient internamente)
+        Double costoReal = costoService.calcularCostoReal(tramo);
 
         // Liberar camión si existe
         if (tramo.getCamion() != null) {
