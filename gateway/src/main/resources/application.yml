@@ -1,0 +1,47 @@
+server:
+  port: 9000
+
+spring:
+  cloud:
+    gateway:
+      routes:
+
+        - id: clientes
+          uri: http://backend:8080
+          predicates:
+            - Path=/clientes/**
+
+        - id: contenedores
+          uri: http://backend:8080
+          predicates:
+            - Path=/contenedores/**
+
+        - id: solicitudes
+          uri: http://backend:8080
+          predicates:
+            - Path=/solicitudes/**
+
+        - id: rutas
+          uri: http://backend:8080
+          predicates:
+            - Path=/rutas/**
+
+        - id: tramos
+          uri: http://backend:8080
+          predicates:
+            - Path=/tramos/**
+
+        - id: camiones
+          uri: http://backend:8080
+          predicates:
+            - Path=/camiones/**
+
+        - id: depositos
+          uri: http://backend:8080
+          predicates:
+            - Path=/depositos/**
+
+        - id: tarifas
+          uri: http://backend:8080
+          predicates:
+            - Path=/tarifas/**
