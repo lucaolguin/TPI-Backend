@@ -1,6 +1,12 @@
 {
   "realm": "tpi",
   "enabled": true,
+  "roles": {
+    "realm": [
+      { "name": "user" },
+      { "name": "admin" }
+    ]
+  },
   "users": [
     {
       "username": "testuser",
@@ -21,6 +27,5 @@
       "directAccessGrantsEnabled": true,
       "protocol": "openid-connect"
     }
-  ],
-  "realmRoles": ["user", "admin"]
+  ]
 }
