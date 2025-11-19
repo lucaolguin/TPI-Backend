@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.1.1
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json:ro
+    restart: unless-stopped
+
+# Nota: este docker-compose levanta solo Keycloak en modo 'start-dev' y
+# importa el realm definido en `infra/keycloak/realm-export.json`.
+# Para integrar servicios (gateway/logistica-backend) podés ampliar este
+# archivo añadiendo servicios con sus Dockerfiles y redes.

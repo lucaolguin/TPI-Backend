@@ -1,0 +1,26 @@
+{
+  "realm": "tpi",
+  "enabled": true,
+  "users": [
+    {
+      "username": "testuser",
+      "enabled": true,
+      "credentials": [
+        { "type": "password", "value": "test", "temporary": false }
+      ],
+      "realmRoles": ["user"]
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "logistica-backend",
+      "secret": "logistica-secret",
+      "enabled": true,
+      "redirectUris": ["*"],
+      "publicClient": false,
+      "directAccessGrantsEnabled": true,
+      "protocol": "openid-connect"
+    }
+  ],
+  "realmRoles": ["user", "admin"]
+}
