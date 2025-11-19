@@ -46,4 +46,14 @@ public class TramoController {
     public TramoDto asignarCamion(@PathVariable Long id, @RequestBody com.tpi.logistica.dto.TramoAssignDto dto) {
         return TramoMapper.toDto(tramoService.asignarCamion(id, dto.getCamionId()));
     }
+    @PostMapping("/{id}/iniciar")
+    public TramoDto iniciarTramo(@PathVariable Long id) {
+        return TramoMapper.toDto(tramoService.iniciarTramo(id));
+    }
+
+    @PostMapping("/{id}/finalizar")
+    public TramoDto finalizarTramo(@PathVariable Long id) {
+        return TramoMapper.toDto(tramoService.finalizarTramo(id));
+    }
+
 }

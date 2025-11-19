@@ -28,6 +28,11 @@ public class GoogleMapsClient implements MapsClient {
         this(apiKey, HttpClient.newHttpClient(), "https://maps.googleapis.com/");
     }
 
+    // Default constructor for frameworks that require it (e.g. some DI containers)
+    public GoogleMapsClient() {
+        this(null, HttpClient.newHttpClient(), "https://maps.googleapis.com/");
+    }
+
     // Test / integration friendly constructor
     public GoogleMapsClient(String apiKey, HttpClient httpClient, String baseUrl) {
         this.apiKey = apiKey;
